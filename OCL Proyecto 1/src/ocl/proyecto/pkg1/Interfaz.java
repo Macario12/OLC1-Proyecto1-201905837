@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -23,6 +24,7 @@ public class Interfaz extends javax.swing.JFrame {
     /**
      * Creates new form Interfaz
      */
+    public static String list_of_names="";
     public Interfaz() {
         initComponents();
     }
@@ -92,6 +94,11 @@ public class Interfaz extends javax.swing.JFrame {
         jButton1.setText("Generar Automata");
 
         jButton2.setText("Analizar Entrada");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("Salida");
@@ -196,6 +203,19 @@ public class Interfaz extends javax.swing.JFrame {
         // TODO add your handling code here:
         jTextArea1.setText(abrirArchivo());
     }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        list_of_names="";
+        jTextArea2.setText("");
+        try {
+            String path = jTextArea1.getText();
+            Analizadores.parser sintactico;
+            sintactico = new Analizadores.parser(new Analizadores.Lexico(new StringReader(path)));
+            sintactico.parse();
+            jTextArea2.setText(list_of_names);
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments

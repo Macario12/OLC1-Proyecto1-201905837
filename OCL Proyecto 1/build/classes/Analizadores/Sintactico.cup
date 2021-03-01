@@ -1,0 +1,122 @@
+package Analizadores;
+import java_cup.runtime.*;
+import ocl.proyecto.pkg1.*;
+
+parser code
+{:  
+    //-----------------------------------------para errores sintacticos-------------------------------------------------------------------------------------------
+     public void syntax_error(Symbol s){ 
+        System.out.println("Error sintactico en la linea " + (s.left) +
+        " Columna "+s.right+ ". No se esperaba este componente: " +s.value+"."); 
+    } 
+
+    //Codigo para errores que ya no se pueden recuperar
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
+        System.out.println("Error sintactico irrecuperable en la linea " + 
+        (s.left)+ " Columna "+s.right+". Componente " + s.value + 
+        " no reconocido."); 
+    }  
+    //-------------------------------------------------------------------------------------------------------------------------------------------8
+:}
+
+action code {:
+:}
+
+// terminal
+terminal String conj, unaomasveces, concatenacion, ceroomasveces, disyuncion, ceroounavez, tildeseparacion, especialC;
+terminal String llaveapertura, llavecerradura, dospuntos, guion, mayorq, puntoycoma, porcentaje, identificador;
+terminal String entero, cadena, comma, a33, a34, a35, a36, a38, a39, a40, a41, a47, a60, a61, a64, a91, a92, a93, a94, a95, a96;
+
+
+// no terminal
+non terminal String INICIO, CUERPO, CONJUNTO,CONJUNTODEF,EXPRESION,EXPRESIONDEF,CODIGOASCCI,EXPVALIDAR,CADENAAR;
+
+
+start with INICIO;
+INICIO ::= llaveapertura CUERPO porcentaje porcentaje porcentaje porcentaje EXPVALIDAR llavecerradura  {:System.out.println("FUNCIONANDO");:}
+    
+    ;
+CUERPO::=  CONJUNTO CUERPO
+    |EXPRESION CUERPO
+    |EXPRESION
+    |CONJUNTO
+    ;
+
+CONJUNTO::= conj dospuntos identificador guion mayorq CONJUNTODEF:a puntoycoma{:System.out.println("El valor de la expresión es: "+a);:}
+    ;
+CONJUNTODEF::= 
+     identificador:a tildeseparacion identificador:b {:RESULT= "Inicia "+a+"Final "+b;:}
+    |entero:a tildeseparacion entero:b {: RESULT= "Inicia "+a+"Final "+b; :}
+    |CODIGOASCCI:a tildeseparacion CODIGOASCCI:b {: RESULT= "Inicia "+a+"Final "+b; :}
+    |identificador:a comma CONJUNTODEF:b {: RESULT=a +","+b; :} 
+    |entero:a comma CONJUNTODEF:b {: RESULT=a +","+b; :} 
+    |CODIGOASCCI:a comma CONJUNTODEF:b {: RESULT=a +","+b; :} 
+    |identificador:a {: RESULT= a; :}
+    |entero:a {:RESULT = a; :}
+    |CODIGOASCCI:a {:RESULT = a; :}
+    |especialC
+    ;
+
+CODIGOASCCI::= a33
+    |a34
+    |a35
+    |a36
+    |a38
+    |a39
+    |a40
+    |a41
+    |a47
+    |a60
+    |a61
+    |a64
+    |a91
+    |a92
+    |a93
+    |a94
+    |a95
+    |a96
+    |unaomasveces
+    |concatenacion
+    |ceroomasveces
+    |disyuncion
+    |ceroounavez
+    |tildeseparacion
+    |llaveapertura
+    |llavecerradura
+    |dospuntos
+    |guion
+    |mayorq
+    |puntoycoma
+    |porcentaje 
+    |comma
+    ;
+    
+EXPRESION::= identificador guion mayorq EXPRESIONDEF:a puntoycoma  {:System.out.println("El valor de la expresión es: "+a);:}
+    ;
+
+
+EXPRESIONDEF::=  
+      disyuncion   EXPRESIONDEF:a  EXPRESIONDEF:b   {:RESULT="|"+a+" "+b;:}
+    | concatenacion  EXPRESIONDEF:a EXPRESIONDEF:b  {:RESULT="."+a+" "+b;:}
+    | unaomasveces EXPRESIONDEF:a {:RESULT="+"+a;:}
+    | ceroomasveces EXPRESIONDEF:a {:RESULT="*"+a;:}
+    | ceroounavez EXPRESIONDEF:a {:RESULT="?"+a;:}
+    | llaveapertura identificador:a llavecerradura {:RESULT=a;:}
+    | cadena:a {:RESULT=a;:}
+    |especialC
+    ;
+
+
+
+EXPVALIDAR::= CADENAAR EXPVALIDAR
+    |CADENAAR
+    ;  
+
+CADENAAR::= identificador dospuntos cadena:a puntoycoma {:System.out.println("Cadena: "+a);:}    
+        | identificador dospuntos especialC:a puntoycoma {:System.out.println("Cadena: "+a);:} ;
+/*
+//2+2*2.5+10*2
+
+*/
+/*LID::= LID comaa nombre:name {:App.Aplicacion.list_of_names+=name+"\n";:}
+    | nombre:name {:App.Aplicacion.list_of_names+=name+"\n";:};*/
