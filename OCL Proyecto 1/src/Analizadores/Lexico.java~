@@ -809,7 +809,7 @@ public class Lexico implements java_cup.runtime.Scanner {
             // fall through
           case 75: break;
           case 37: 
-            { return new Symbol(especialC,yyline,yychar,yytext());
+            { return new Symbol(sym.especialC,yyline,yychar,yytext());
             } 
             // fall through
           case 76: break;

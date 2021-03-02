@@ -2,8 +2,69 @@ package Analizadores;
 import java_cup.runtime.*;
 import ocl.proyecto.pkg1.*;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+
 parser code
 {:  
+
+    public static int contadorid =1;
+    public static Nodo Raiz;
+
+    public static void graficarArbol(Nodo act, String nombre){
+        FileWriter fichero = null;
+        PrintWriter pw = null;
+        try {
+            fichero = new FileWriter("C:\\Users\\home\\Desktop\\" + nombre + ".dot");
+            pw = new PrintWriter(fichero);
+            pw.println("digraph G{");
+            pw.println("rankdir=UD");
+            pw.println("node[shape=box]");
+            pw.println("concentrate=true");
+            pw.println(act.getCodigoInterno());
+            pw.println("}");
+        } catch (Exception e) {
+            System.out.println("error, no se realizo el archivo");
+        } finally {
+            try {
+                if (null != fichero) {
+                    fichero.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        //para compilar el archivo dot y obtener la imagen
+        try {
+            //dirección doonde se ecnuentra el compilador de graphviz
+            String dotPath = "C:\\Program Files (x86)\\Graphviz2.38\\bin\\dot.exe";
+            //dirección del archivo dot
+            String fileInputPath = "C:\\Users\\home\\Desktop\\" + nombre + ".dot";
+            //dirección donde se creara la magen
+            String fileOutputPath = "C:\\Users\\home\\Desktop\\" +nombre+ ".jpg";
+            //tipo de conversón
+            String tParam = "-Tjpg";
+            String tOParam = "-o";
+
+            String[] cmd = new String[5];
+            cmd[0] = dotPath;
+            cmd[1] = tParam;
+            cmd[2] = fileInputPath;
+            cmd[3] = tOParam;
+            cmd[4] = fileOutputPath;
+
+            Runtime rt = Runtime.getRuntime();
+
+            rt.exec(cmd);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+        }
+    }
+
     //-----------------------------------------para errores sintacticos-------------------------------------------------------------------------------------------
      public void syntax_error(Symbol s){ 
         System.out.println("Error sintactico en la linea " + (s.left) +
@@ -29,8 +90,8 @@ terminal String entero, cadena, comma, a33, a34, a35, a36, a38, a39, a40, a41, a
 
 
 // no terminal
-non terminal String INICIO, CUERPO, CONJUNTO,CONJUNTODEF,EXPRESION,EXPRESIONDEF,CODIGOASCCI,EXPVALIDAR,CADENAAR;
-
+non terminal String INICIO, CUERPO, CONJUNTO, CONJUNTODEF,CODIGOASCCI,EXPVALIDAR,CADENAAR;
+non terminal Nodo EXPRESION, EXPRESIONDEF;
 
 start with INICIO;
 INICIO ::= llaveapertura CUERPO porcentaje porcentaje porcentaje porcentaje EXPVALIDAR llavecerradura  {:System.out.println("FUNCIONANDO");:}
@@ -42,19 +103,19 @@ CUERPO::=  CONJUNTO CUERPO
     |CONJUNTO
     ;
 
-CONJUNTO::= conj dospuntos identificador guion mayorq CONJUNTODEF:a puntoycoma{:System.out.println("El valor de la expresión es: "+a);:}
+CONJUNTO::= conj dospuntos identificador guion mayorq CONJUNTODEF:a puntoycoma{::}
     ;
 CONJUNTODEF::= 
-     identificador:a tildeseparacion identificador:b {:RESULT= "Inicia "+a+"Final "+b;:}
-    |entero:a tildeseparacion entero:b {: RESULT= "Inicia "+a+"Final "+b; :}
-    |CODIGOASCCI:a tildeseparacion CODIGOASCCI:b {: RESULT= "Inicia "+a+"Final "+b; :}
+     identificador:a tildeseparacion identificador:b {::}
+    |entero:a tildeseparacion entero:b {::}
+    |CODIGOASCCI:a tildeseparacion CODIGOASCCI:b {::}
     |identificador:a comma CONJUNTODEF:b {: RESULT=a +","+b; :} 
     |entero:a comma CONJUNTODEF:b {: RESULT=a +","+b; :} 
     |CODIGOASCCI:a comma CONJUNTODEF:b {: RESULT=a +","+b; :} 
-    |identificador:a {: RESULT= a; :}
-    |entero:a {:RESULT = a; :}
-    |CODIGOASCCI:a {:RESULT = a; :}
-    |especialC
+    |identificador:a {::}
+    |entero:a {::}
+    |CODIGOASCCI:a {::}
+    |especialC:a {::}
     ;
 
 CODIGOASCCI::= a33
@@ -91,19 +152,57 @@ CODIGOASCCI::= a33
     |comma
     ;
     
-EXPRESION::= identificador guion mayorq EXPRESIONDEF:a puntoycoma  {:System.out.println("El valor de la expresión es: "+a);:}
+EXPRESION::= identificador guion mayorq EXPRESIONDEF:a puntoycoma  {:
+                parser.Raiz = a;
+                graficarArbol(a,"prueba");
+                :}
     ;
 
 
 EXPRESIONDEF::=  
-      disyuncion   EXPRESIONDEF:a  EXPRESIONDEF:b   {:RESULT="|"+a+" "+b;:}
-    | concatenacion  EXPRESIONDEF:a EXPRESIONDEF:b  {:RESULT="."+a+" "+b;:}
-    | unaomasveces EXPRESIONDEF:a {:RESULT="+"+a;:}
-    | ceroomasveces EXPRESIONDEF:a {:RESULT="*"+a;:}
-    | ceroounavez EXPRESIONDEF:a {:RESULT="?"+a;:}
-    | llaveapertura identificador:a llavecerradura {:RESULT=a;:}
-    | cadena:a {:RESULT=a;:}
-    |especialC
+      disyuncion   EXPRESIONDEF:a  EXPRESIONDEF:b   {:
+                Nodo nuevaDisyuncion = new Nodo(a,b,"|",parser.contadorid);
+                parser.contadorid++;
+                RESULT=nuevaDisyuncion;
+      :}
+    | concatenacion  EXPRESIONDEF:a EXPRESIONDEF:b  {:
+                Nodo nuevaConcatenacion = new Nodo(a,b,".",parser.contadorid);
+                parser.contadorid++;
+                RESULT=nuevaConcatenacion;
+    :}
+    | unaomasveces EXPRESIONDEF:a {:
+            Nodo nuevaunaomasveces = new Nodo(a,null,"+",parser.contadorid);
+                parser.contadorid++;
+                RESULT=nuevaunaomasveces;
+    :}
+    | ceroomasveces EXPRESIONDEF:a {:
+                Nodo nuevaceroomasveces = new Nodo(a,null,"*",parser.contadorid);
+                parser.contadorid++;
+                RESULT=nuevaceroomasveces;
+    
+    :}
+    | ceroounavez EXPRESIONDEF:a {:
+                Nodo nuevocerounavez = new Nodo(a,null,"?",parser.contadorid);
+                parser.contadorid++;
+                RESULT=nuevocerounavez;
+    :}
+    | llaveapertura identificador:a llavecerradura {:
+                Nodo nuevoIdentificador = new Nodo(null, null,a,parser.contadorid);
+                parser.contadorid++;
+                RESULT=nuevoIdentificador;
+    :}
+    | cadena:a {:
+                Nodo nuevoCadena = new Nodo(null, null,a.replace("\"",""),parser.contadorid);
+                
+                parser.contadorid++;
+                RESULT=nuevoCadena;
+    
+    :}
+    |especialC:a {:
+                Nodo nuevoespcialC = new Nodo(null, null,a,parser.contadorid);
+                parser.contadorid++;
+                RESULT=nuevoespcialC;
+    :}
     ;
 
 
