@@ -15,12 +15,20 @@ public class Nodo {
     public Nodo hder;
     public String valor;
     public int id;
+    public String anulable;
+    public int numNodo;
+    public String primeros;
+    public String ultimos;
 
-    public Nodo(Nodo hizq, Nodo hder, String valor, int id) {
+    public Nodo(Nodo hizq, Nodo hder, String valor, int id, String anulable, int numNodo, String primeros, String ultimos) {
         this.hizq = hizq;
         this.hder = hder;
         this.valor = valor;
         this.id = id;
+        this.anulable = anulable;
+        this.numNodo = numNodo;
+        this.primeros = primeros;
+        this.ultimos = ultimos;
     }
 
     public Nodo getHizq() {
@@ -55,12 +63,44 @@ public class Nodo {
         this.id = id;
     }
     
+    public String getAnulable() {
+        return anulable;
+    }
+
+    public void setAnulable(String anulable) {
+        this.anulable = anulable;
+    }
+    
+     public int getNumNodo() {
+        return numNodo;
+    }
+
+    public void setNumNodo(int numNodo) {
+        this.numNodo = numNodo;
+    }
+    
+    public String getPrimeros() {
+        return primeros;
+    }
+
+    public void setPrimeros(String primeros) {
+        this.primeros = primeros;
+    }
+    public String getUltimos() {
+        return ultimos;
+    }
+
+    public void setUltimos(String ultimos) {
+        this.ultimos = ultimos;
+    }
+    
     public String getCodigoInterno() {
         String etiqueta;
         if (hizq == null && hder == null) {
-            etiqueta = "nodo" + id + " [ label =\"" + valor+"\"];\n";
+            //[shape=record, label ="a|{1|2|3}|6"]
+            etiqueta = "nodo" + id + " [ shape=record, label =\""+primeros+"|" +"{"+anulable+"|"+valor+"| id:"+numNodo+"}|"+ultimos+"\"];\n";
         } else {
-            etiqueta = "nodo" + id + " [ label =\"" + valor + "\"];\n";
+            etiqueta = "nodo" + id + " [ shape=record, label =\""+primeros+"|" +"{"+anulable+"|"+valor+"| id:"+numNodo+"}|"+ultimos+"\"];\n";
         }
         if (hizq != null) {
             etiqueta = etiqueta + hizq.getCodigoInterno()
@@ -71,6 +111,7 @@ public class Nodo {
                     + "nodo" + id + "->nodo" + hder.id + "\n";
         }
         return etiqueta;
+        
     }
     
 }

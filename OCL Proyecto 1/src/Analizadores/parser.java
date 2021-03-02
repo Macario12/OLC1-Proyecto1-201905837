@@ -250,12 +250,14 @@ public class parser extends java_cup.runtime.lr_parser {
 
     public static int contadorid =1;
     public static Nodo Raiz;
+    public static int contadorArc = 1;
+    public  int contadorhojas = 1;
 
     public static void graficarArbol(Nodo act, String nombre){
         FileWriter fichero = null;
         PrintWriter pw = null;
         try {
-            fichero = new FileWriter("C:\\Users\\home\\Desktop\\" + nombre + ".dot");
+            fichero = new FileWriter("C:\\Users\\home\\Desktop\\" + nombre+ contadorArc + ".dot");
             pw = new PrintWriter(fichero);
             pw.println("digraph G{");
             pw.println("rankdir=UD");
@@ -279,13 +281,13 @@ public class parser extends java_cup.runtime.lr_parser {
             //dirección doonde se ecnuentra el compilador de graphviz
             String dotPath = "C:\\Program Files (x86)\\Graphviz2.38\\bin\\dot.exe";
             //dirección del archivo dot
-            String fileInputPath = "C:\\Users\\home\\Desktop\\" + nombre + ".dot";
+            String fileInputPath = "C:\\Users\\home\\Desktop\\" + nombre + contadorArc + ".dot";
             //dirección donde se creara la magen
-            String fileOutputPath = "C:\\Users\\home\\Desktop\\" +nombre+ ".jpg";
+            String fileOutputPath = "C:\\Users\\home\\Desktop\\" +nombre + contadorArc + ".jpg";
             //tipo de conversón
             String tParam = "-Tjpg";
             String tOParam = "-o";
-
+            contadorArc++;
             String[] cmd = new String[5];
             cmd[0] = dotPath;
             cmd[1] = tParam;
@@ -850,8 +852,20 @@ class CUP$parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Nodo a = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
-                parser.Raiz = a;
-                graficarArbol(a,"prueba");
+                Nodo numeralnodo = new Nodo(null, null, "#", parser.contadorid,"N",parser.contadorhojas, parser.contadorhojas+"",parser.contadorhojas+"");
+                parser.contadorhojas++;
+                parser.contadorid++;
+                Nodo nodoRaiz2 = new Nodo(null,null,"",0,"",0,"","");
+                if(a.getAnulable()=="A"){
+                    nodoRaiz2 = new Nodo(a, numeralnodo, ".", parser.contadorid,"N",0, a.getPrimeros()+","+numeralnodo.getPrimeros(), numeralnodo.getUltimos());
+                }else{
+                    nodoRaiz2 = new Nodo(a, numeralnodo, ".", parser.contadorid,"N",0, a.getPrimeros()+"", numeralnodo.getUltimos());
+                }
+                parser.contadorid++;
+                Interfaz.Arboles.add(nodoRaiz2);
+                Interfaz.Arboles.add(a);
+                 contadorhojas = 1;
+                graficarArbol(nodoRaiz2,"prueba");
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("EXPRESION",7, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -868,7 +882,12 @@ class CUP$parser$actions {
 		int bright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Nodo b = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                Nodo nuevaDisyuncion = new Nodo(a,b,"|",parser.contadorid);
+                 Nodo nuevaDisyuncion;
+                if(a.getAnulable()=="A" || b.getAnulable()=="A"){
+                 nuevaDisyuncion = new Nodo(a,b,"\\"+"|",parser.contadorid,"A",0, a.getPrimeros()+","+b.getPrimeros(), a.getUltimos() + ","+b.getUltimos());
+                }else{
+                 nuevaDisyuncion = new Nodo(a,b,"\\"+"|",parser.contadorid,"N",0, a.getPrimeros()+","+b.getPrimeros(), a.getUltimos() + ","+b.getUltimos());
+                }
                 parser.contadorid++;
                 RESULT=nuevaDisyuncion;
       
@@ -887,7 +906,16 @@ class CUP$parser$actions {
 		int bright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Nodo b = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                Nodo nuevaConcatenacion = new Nodo(a,b,".",parser.contadorid);
+                Nodo nuevaConcatenacion  = new Nodo(null,null,"",0,"",0,"","");
+                if(a.getAnulable()=="A" && b.getAnulable()=="A"){
+                        nuevaConcatenacion = new Nodo(a,b,".",parser.contadorid,"A",0, a.getPrimeros()+","+b.getPrimeros(), a.getUltimos() + ","+b.getUltimos());
+                }else if (a.getAnulable()=="N" && b.getAnulable()=="N"){
+                     nuevaConcatenacion = new Nodo(a,b,".",parser.contadorid,"N",0,a.getPrimeros()+"", b.getUltimos()+"");
+                }else if (a.getAnulable()=="A" && b.getAnulable()=="N"){
+                     nuevaConcatenacion = new Nodo(a,b,".",parser.contadorid,"N",0,a.getPrimeros()+","+ b.getPrimeros(), b.getUltimos() +"");
+                }else if (a.getAnulable()=="N" && b.getAnulable()=="A"){
+                     nuevaConcatenacion = new Nodo(a,b,".",parser.contadorid,"N",0,a.getPrimeros()+"", a.getUltimos()+","+b.getUltimos() );
+                }
                 parser.contadorid++;
                 RESULT=nuevaConcatenacion;
     
@@ -903,7 +931,12 @@ class CUP$parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Nodo a = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-            Nodo nuevaunaomasveces = new Nodo(a,null,"+",parser.contadorid);
+            Nodo nuevaunaomasveces;
+            if(a.getAnulable()=="N"){
+                nuevaunaomasveces = new Nodo(a,null,"+",parser.contadorid,"N",0, a.getPrimeros(), a.getUltimos());
+            }else{
+                 nuevaunaomasveces = new Nodo(a,null,"+",parser.contadorid,"A",0, a.getPrimeros(), a.getUltimos());
+            }
                 parser.contadorid++;
                 RESULT=nuevaunaomasveces;
     
@@ -919,7 +952,7 @@ class CUP$parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Nodo a = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                Nodo nuevaceroomasveces = new Nodo(a,null,"*",parser.contadorid);
+                Nodo nuevaceroomasveces = new Nodo(a,null,"*",parser.contadorid,"A",0,a.getPrimeros(), a.getUltimos() );
                 parser.contadorid++;
                 RESULT=nuevaceroomasveces;
     
@@ -936,7 +969,7 @@ class CUP$parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Nodo a = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                Nodo nuevocerounavez = new Nodo(a,null,"?",parser.contadorid);
+                Nodo nuevocerounavez = new Nodo(a,null,"?",parser.contadorid,"A",0, a.getPrimeros(), a.getUltimos());
                 parser.contadorid++;
                 RESULT=nuevocerounavez;
     
@@ -952,7 +985,8 @@ class CUP$parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
-                Nodo nuevoIdentificador = new Nodo(null, null,a,parser.contadorid);
+                Nodo nuevoIdentificador = new Nodo(null, null,a,parser.contadorid,"N", parser.contadorhojas, parser.contadorhojas+"",parser.contadorhojas+"");
+                parser.contadorhojas++;
                 parser.contadorid++;
                 RESULT=nuevoIdentificador;
     
@@ -968,8 +1002,8 @@ class CUP$parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                Nodo nuevoCadena = new Nodo(null, null,a.replace("\"",""),parser.contadorid);
-                
+                Nodo nuevoCadena = new Nodo(null, null,a.replace("\"",""),parser.contadorid,"N", parser.contadorhojas, parser.contadorhojas+"",parser.contadorhojas+"");
+                parser.contadorhojas++;
                 parser.contadorid++;
                 RESULT=nuevoCadena;
     
@@ -986,7 +1020,8 @@ class CUP$parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                Nodo nuevoespcialC = new Nodo(null, null,a,parser.contadorid);
+                Nodo nuevoespcialC = new Nodo(null, null,"\\"+a,parser.contadorid,"N",parser.contadorhojas, parser.contadorhojas+"",parser.contadorhojas+"");
+                parser.contadorhojas++;
                 parser.contadorid++;
                 RESULT=nuevoespcialC;
     

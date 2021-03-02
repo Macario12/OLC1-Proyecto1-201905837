@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -25,6 +26,8 @@ public class Interfaz extends javax.swing.JFrame {
      * Creates new form Interfaz
      */
     public static String list_of_names="";
+    public static ArrayList<Nodo> Arboles;
+    public static ArrayList<String> nombre;
     public Interfaz() {
         initComponents();
     }
@@ -205,6 +208,8 @@ public class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        Arboles = new ArrayList<Nodo>();
+        nombre = new ArrayList<String>();
         list_of_names="";
         jTextArea2.setText("");
         try {

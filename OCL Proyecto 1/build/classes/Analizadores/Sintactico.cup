@@ -12,12 +12,14 @@ parser code
 
     public static int contadorid =1;
     public static Nodo Raiz;
+    public static int contadorArc = 1;
+    public  int contadorhojas = 1;
 
     public static void graficarArbol(Nodo act, String nombre){
         FileWriter fichero = null;
         PrintWriter pw = null;
         try {
-            fichero = new FileWriter("C:\\Users\\home\\Desktop\\" + nombre + ".dot");
+            fichero = new FileWriter("C:\\Users\\home\\Desktop\\" + nombre+ contadorArc + ".dot");
             pw = new PrintWriter(fichero);
             pw.println("digraph G{");
             pw.println("rankdir=UD");
@@ -41,13 +43,13 @@ parser code
             //dirección doonde se ecnuentra el compilador de graphviz
             String dotPath = "C:\\Program Files (x86)\\Graphviz2.38\\bin\\dot.exe";
             //dirección del archivo dot
-            String fileInputPath = "C:\\Users\\home\\Desktop\\" + nombre + ".dot";
+            String fileInputPath = "C:\\Users\\home\\Desktop\\" + nombre + contadorArc + ".dot";
             //dirección donde se creara la magen
-            String fileOutputPath = "C:\\Users\\home\\Desktop\\" +nombre+ ".jpg";
+            String fileOutputPath = "C:\\Users\\home\\Desktop\\" +nombre + contadorArc + ".jpg";
             //tipo de conversón
             String tParam = "-Tjpg";
             String tOParam = "-o";
-
+            contadorArc++;
             String[] cmd = new String[5];
             cmd[0] = dotPath;
             cmd[1] = tParam;
@@ -153,53 +155,86 @@ CODIGOASCCI::= a33
     ;
     
 EXPRESION::= identificador guion mayorq EXPRESIONDEF:a puntoycoma  {:
-                parser.Raiz = a;
-                graficarArbol(a,"prueba");
+                Nodo numeralnodo = new Nodo(null, null, "#", parser.contadorid,"N",parser.contadorhojas, parser.contadorhojas+"",parser.contadorhojas+"");
+                parser.contadorhojas++;
+                parser.contadorid++;
+                Nodo nodoRaiz2 = new Nodo(null,null,"",0,"",0,"","");
+                if(a.getAnulable()=="A"){
+                    nodoRaiz2 = new Nodo(a, numeralnodo, ".", parser.contadorid,"N",0, a.getPrimeros()+","+numeralnodo.getPrimeros(), numeralnodo.getUltimos());
+                }else{
+                    nodoRaiz2 = new Nodo(a, numeralnodo, ".", parser.contadorid,"N",0, a.getPrimeros()+"", numeralnodo.getUltimos());
+                }
+                parser.contadorid++;
+                Interfaz.Arboles.add(nodoRaiz2);
+                Interfaz.Arboles.add(a);
+                 contadorhojas = 1;
+                graficarArbol(nodoRaiz2,"prueba");
                 :}
     ;
 
 
 EXPRESIONDEF::=  
       disyuncion   EXPRESIONDEF:a  EXPRESIONDEF:b   {:
-                Nodo nuevaDisyuncion = new Nodo(a,b,"|",parser.contadorid);
+                 Nodo nuevaDisyuncion;
+                if(a.getAnulable()=="A" || b.getAnulable()=="A"){
+                 nuevaDisyuncion = new Nodo(a,b,"\\"+"|",parser.contadorid,"A",0, a.getPrimeros()+","+b.getPrimeros(), a.getUltimos() + ","+b.getUltimos());
+                }else{
+                 nuevaDisyuncion = new Nodo(a,b,"\\"+"|",parser.contadorid,"N",0, a.getPrimeros()+","+b.getPrimeros(), a.getUltimos() + ","+b.getUltimos());
+                }
                 parser.contadorid++;
                 RESULT=nuevaDisyuncion;
       :}
     | concatenacion  EXPRESIONDEF:a EXPRESIONDEF:b  {:
-                Nodo nuevaConcatenacion = new Nodo(a,b,".",parser.contadorid);
+                Nodo nuevaConcatenacion  = new Nodo(null,null,"",0,"",0,"","");
+                if(a.getAnulable()=="A" && b.getAnulable()=="A"){
+                        nuevaConcatenacion = new Nodo(a,b,".",parser.contadorid,"A",0, a.getPrimeros()+","+b.getPrimeros(), a.getUltimos() + ","+b.getUltimos());
+                }else if (a.getAnulable()=="N" && b.getAnulable()=="N"){
+                     nuevaConcatenacion = new Nodo(a,b,".",parser.contadorid,"N",0,a.getPrimeros()+"", b.getUltimos()+"");
+                }else if (a.getAnulable()=="A" && b.getAnulable()=="N"){
+                     nuevaConcatenacion = new Nodo(a,b,".",parser.contadorid,"N",0,a.getPrimeros()+","+ b.getPrimeros(), b.getUltimos() +"");
+                }else if (a.getAnulable()=="N" && b.getAnulable()=="A"){
+                     nuevaConcatenacion = new Nodo(a,b,".",parser.contadorid,"N",0,a.getPrimeros()+"", a.getUltimos()+","+b.getUltimos() );
+                }
                 parser.contadorid++;
                 RESULT=nuevaConcatenacion;
     :}
     | unaomasveces EXPRESIONDEF:a {:
-            Nodo nuevaunaomasveces = new Nodo(a,null,"+",parser.contadorid);
+            Nodo nuevaunaomasveces;
+            if(a.getAnulable()=="N"){
+                nuevaunaomasveces = new Nodo(a,null,"+",parser.contadorid,"N",0, a.getPrimeros(), a.getUltimos());
+            }else{
+                 nuevaunaomasveces = new Nodo(a,null,"+",parser.contadorid,"A",0, a.getPrimeros(), a.getUltimos());
+            }
                 parser.contadorid++;
                 RESULT=nuevaunaomasveces;
     :}
     | ceroomasveces EXPRESIONDEF:a {:
-                Nodo nuevaceroomasveces = new Nodo(a,null,"*",parser.contadorid);
+                Nodo nuevaceroomasveces = new Nodo(a,null,"*",parser.contadorid,"A",0,a.getPrimeros(), a.getUltimos() );
                 parser.contadorid++;
                 RESULT=nuevaceroomasveces;
     
     :}
     | ceroounavez EXPRESIONDEF:a {:
-                Nodo nuevocerounavez = new Nodo(a,null,"?",parser.contadorid);
+                Nodo nuevocerounavez = new Nodo(a,null,"?",parser.contadorid,"A",0, a.getPrimeros(), a.getUltimos());
                 parser.contadorid++;
                 RESULT=nuevocerounavez;
     :}
     | llaveapertura identificador:a llavecerradura {:
-                Nodo nuevoIdentificador = new Nodo(null, null,a,parser.contadorid);
+                Nodo nuevoIdentificador = new Nodo(null, null,a,parser.contadorid,"N", parser.contadorhojas, parser.contadorhojas+"",parser.contadorhojas+"");
+                parser.contadorhojas++;
                 parser.contadorid++;
                 RESULT=nuevoIdentificador;
     :}
     | cadena:a {:
-                Nodo nuevoCadena = new Nodo(null, null,a.replace("\"",""),parser.contadorid);
-                
+                Nodo nuevoCadena = new Nodo(null, null,a.replace("\"",""),parser.contadorid,"N", parser.contadorhojas, parser.contadorhojas+"",parser.contadorhojas+"");
+                parser.contadorhojas++;
                 parser.contadorid++;
                 RESULT=nuevoCadena;
     
     :}
     |especialC:a {:
-                Nodo nuevoespcialC = new Nodo(null, null,a,parser.contadorid);
+                Nodo nuevoespcialC = new Nodo(null, null,"\\"+a,parser.contadorid,"N",parser.contadorhojas, parser.contadorhojas+"",parser.contadorhojas+"");
+                parser.contadorhojas++;
                 parser.contadorid++;
                 RESULT=nuevoespcialC;
     :}
