@@ -307,5 +307,7 @@ public class Interfaz extends javax.swing.JFrame {
             
             return text;
     }
+    
+    
 }
 

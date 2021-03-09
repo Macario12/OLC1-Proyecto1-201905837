@@ -305,6 +305,8 @@ public class parser extends java_cup.runtime.lr_parser {
         }
     }
 
+
+
     //-----------------------------------------para errores sintacticos-------------------------------------------------------------------------------------------
      public void syntax_error(Symbol s){ 
         System.out.println("Error sintactico en la linea " + (s.left) +
@@ -864,8 +866,12 @@ class CUP$parser$actions {
                 parser.contadorid++;
                 Interfaz.Arboles.add(nodoRaiz2);
                 Interfaz.Arboles.add(a);
+                Nodo.preOrden(nodoRaiz2);
                  contadorhojas = 1;
-                graficarArbol(nodoRaiz2,"prueba");
+                graficarArbol(nodoRaiz2,"Arbol");
+                Nodo.graficarTablaSiguientes("tablaSiguientes");
+                Nodo.graficarTablaransciones("tablaTransiciones");
+                Nodo.graficarAFD("AFD");
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("EXPRESION",7, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -986,6 +992,7 @@ class CUP$parser$actions {
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
                 Nodo nuevoIdentificador = new Nodo(null, null,a,parser.contadorid,"N", parser.contadorhojas, parser.contadorhojas+"",parser.contadorhojas+"");
+                
                 parser.contadorhojas++;
                 parser.contadorid++;
                 RESULT=nuevoIdentificador;
@@ -1003,6 +1010,7 @@ class CUP$parser$actions {
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
                 Nodo nuevoCadena = new Nodo(null, null,a.replace("\"",""),parser.contadorid,"N", parser.contadorhojas, parser.contadorhojas+"",parser.contadorhojas+"");
+                
                 parser.contadorhojas++;
                 parser.contadorid++;
                 RESULT=nuevoCadena;
@@ -1021,6 +1029,7 @@ class CUP$parser$actions {
 		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
                 Nodo nuevoespcialC = new Nodo(null, null,"\\"+a,parser.contadorid,"N",parser.contadorhojas, parser.contadorhojas+"",parser.contadorhojas+"");
+                
                 parser.contadorhojas++;
                 parser.contadorid++;
                 RESULT=nuevoespcialC;

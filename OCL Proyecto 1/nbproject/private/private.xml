@@ -5,12 +5,14 @@
         <group>
             <file>file:/C:/Users/home/Desktop/Documentos%20Escritorio/Universidad/Quinto%20Semestre/Compiladores%201/Laboratorio/OLC1-Proyecto1-201905837/OCL%20Proyecto%201/src/Analizadores/Analizadores.java</file>
             <file>file:/C:/Users/home/Desktop/Documentos%20Escritorio/Universidad/Quinto%20Semestre/Compiladores%201/Laboratorio/OLC1-Proyecto1-201905837/OCL%20Proyecto%201/src/ocl/proyecto/pkg1/Nodo.java</file>
-            <file>file:/C:/Users/home/Desktop/Documentos%20Escritorio/Universidad/Quinto%20Semestre/Compiladores%201/Laboratorio/OLC1-Proyecto1-201905837/OCL%20Proyecto%201/src/Analizadores/Lexico.java</file>
             <file>file:/C:/Users/home/Desktop/Documentos%20Escritorio/Universidad/Quinto%20Semestre/Compiladores%201/Laboratorio/OLC1-Proyecto1-201905837/OCL%20Proyecto%201/src/Analizadores/Lexico.jflex</file>
+            <file>file:/C:/Users/home/Desktop/Documentos%20Escritorio/Universidad/Quinto%20Semestre/Compiladores%201/Laboratorio/OLC1-Proyecto1-201905837/OCL%20Proyecto%201/src/ocl/proyecto/pkg1/TransicionN.java</file>
+            <file>file:/C:/Users/home/Desktop/Documentos%20Escritorio/Universidad/Quinto%20Semestre/Compiladores%201/Laboratorio/OLC1-Proyecto1-201905837/OCL%20Proyecto%201/src/ocl/proyecto/pkg1/AFD.java</file>
             <file>file:/C:/Users/home/Desktop/Documentos%20Escritorio/Universidad/Quinto%20Semestre/Compiladores%201/Laboratorio/OLC1-Proyecto1-201905837/OCL%20Proyecto%201/src/Analizadores/parser.java</file>
             <file>file:/C:/Users/home/Desktop/Documentos%20Escritorio/Universidad/Quinto%20Semestre/Compiladores%201/Laboratorio/OLC1-Proyecto1-201905837/OCL%20Proyecto%201/src/ocl/proyecto/pkg1/Interfaz.java</file>
             <file>file:/C:/Users/home/Desktop/Documentos%20Escritorio/Universidad/Quinto%20Semestre/Compiladores%201/Laboratorio/OLC1-Proyecto1-201905837/OCL%20Proyecto%201/src/Analizadores/Sintactico.cup</file>
             <file>file:/C:/Users/home/Desktop/Documentos%20Escritorio/Universidad/Quinto%20Semestre/Compiladores%201/Laboratorio/OLC1-Proyecto1-201905837/OCL%20Proyecto%201/src/Analizadores/sym.java</file>
+            <file>file:/C:/Users/home/Desktop/Documentos%20Escritorio/Universidad/Quinto%20Semestre/Compiladores%201/Laboratorio/OLC1-Proyecto1-201905837/OCL%20Proyecto%201/src/ocl/proyecto/pkg1/SiguientesN.java</file>
         </group>
     </open-files>
 </project-private>

@@ -1,7 +1,6 @@
 package Analizadores;
 import java_cup.runtime.*;
 import ocl.proyecto.pkg1.*;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -66,6 +65,8 @@ parser code
         } finally {
         }
     }
+
+
 
     //-----------------------------------------para errores sintacticos-------------------------------------------------------------------------------------------
      public void syntax_error(Symbol s){ 
@@ -167,8 +168,12 @@ EXPRESION::= identificador guion mayorq EXPRESIONDEF:a puntoycoma  {:
                 parser.contadorid++;
                 Interfaz.Arboles.add(nodoRaiz2);
                 Interfaz.Arboles.add(a);
+                Nodo.preOrden(nodoRaiz2);
                  contadorhojas = 1;
-                graficarArbol(nodoRaiz2,"prueba");
+                graficarArbol(nodoRaiz2,"Arbol");
+                Nodo.graficarTablaSiguientes("tablaSiguientes");
+                Nodo.graficarTablaransciones("tablaTransiciones");
+                Nodo.graficarAFD("AFD");
                 :}
     ;
 
@@ -221,12 +226,14 @@ EXPRESIONDEF::=
     :}
     | llaveapertura identificador:a llavecerradura {:
                 Nodo nuevoIdentificador = new Nodo(null, null,a,parser.contadorid,"N", parser.contadorhojas, parser.contadorhojas+"",parser.contadorhojas+"");
+                
                 parser.contadorhojas++;
                 parser.contadorid++;
                 RESULT=nuevoIdentificador;
     :}
     | cadena:a {:
                 Nodo nuevoCadena = new Nodo(null, null,a.replace("\"",""),parser.contadorid,"N", parser.contadorhojas, parser.contadorhojas+"",parser.contadorhojas+"");
+                
                 parser.contadorhojas++;
                 parser.contadorid++;
                 RESULT=nuevoCadena;
@@ -234,6 +241,7 @@ EXPRESIONDEF::=
     :}
     |especialC:a {:
                 Nodo nuevoespcialC = new Nodo(null, null,"\\"+a,parser.contadorid,"N",parser.contadorhojas, parser.contadorhojas+"",parser.contadorhojas+"");
+                
                 parser.contadorhojas++;
                 parser.contadorid++;
                 RESULT=nuevoespcialC;
