@@ -252,25 +252,25 @@ public static ArrayList<Nodo> ArbolesPreOrden = new ArrayList<Nodo>();
 
         for(int x = 0; x <transN.size()-1;x++){
             String [] cadenaTrans = transN.get(x).transicionT.split(",");
+            String [] posicionesTra = new String[encabezado.size()];
+            for(int v = 0; v < posicionesTra.length; v++){
+                posicionesTra[v] = "<td>...</td>";
+            }
             String alfAFD = "";
             String tranAFD = "";
             int contadordentro = 0;
             String column = "<tr><td>"+transN.get(x).nombreT+" {"+transN.get(x).transicionT+"} "+"</td>";
             for(int j = 0; j<cadenaTrans.length;j++){
                 String num = cadenaTrans[j];
+                for(int w=0; w<encabezado.size();w++){
+                    String alfabeto = encabezado.get(w);
                     for(int y = 0; y<sigN.size();y++){
-                        
-                        for(int w=0; w<encabezado.size();w++){
-                            String alfabeto = encabezado.get(w);
                             if(sigN.get(y).nombreHoja.equals(alfabeto)){
                             if(Integer.parseInt(num)== sigN.get(y).numHoja ){
                                 for(int i = 1; i <transN.size();i++){
                                     if(sigN.get(y).siguiente.equals(transN.get(i).transicionT)){
-                                        for(int v = contadordentro; v < w; v++){
-                                            column += "<td>...</td>";
-                                        }
                                         contadordentro = w+1;
-                                        column += "<td>"+transN.get(i).nombreT+"</td>";
+                                        posicionesTra[w] = "<td>"+transN.get(i).nombreT+"</td>";
                                         alfAFD += ","+alfabeto;
                                         tranAFD += ","+transN.get(i).nombreT;
                                         
@@ -279,28 +279,19 @@ public static ArrayList<Nodo> ArbolesPreOrden = new ArrayList<Nodo>();
                                 }
                             }
                         }
-                        }
-                        
-                        
-                    
+                   }
             }
+            }
+            for(int v = 0; v < posicionesTra.length; v++){
+                column += posicionesTra[v];
             }
             alfAFD = alfAFD.replaceFirst(",", "");
             tranAFD = tranAFD.replaceFirst(",", "");
             arrayAFD.add(new AFD(transN.get(x).nombreT,alfAFD,tranAFD));
-            for(int y = contadordentro; y < encabezado.size(); y++){
-                column += "<td>...</td>";
-            }
             column += "</tr>";
             etiqueta += column;
         }
         
-        
-        /*for(int x = 0; x<arrayAFD.size();x++){
-            System.out.println(arrayAFD.get(x).nombre);
-            System.out.println(arrayAFD.get(x).alfabeto);
-            System.out.println(arrayAFD.get(x).transicion);
-        }*/
         
         return etiqueta;
     }
@@ -359,7 +350,7 @@ public static ArrayList<Nodo> ArbolesPreOrden = new ArrayList<Nodo>();
         FileWriter fichero = null;
         PrintWriter pw = null;
         try {
-            fichero = new FileWriter("C:\\Users\\home\\Desktop\\" + nombre+ contadorArc + ".dot");
+            fichero = new FileWriter("C:\\Users\\home\\Desktop\\Documentos Escritorio\\Universidad\\Quinto Semestre\\Compiladores 1\\Laboratorio\\OLC1-Proyecto1-201905837\\OCL Proyecto 1\\Tabla de Transiciones\\" + nombre + ".dot");
             pw = new PrintWriter(fichero);
             pw.println("digraph G{");
             pw.println("graph [pad=\"0.5\", nodesep=\"0.5\", ranksep=\"2\"];");
@@ -383,9 +374,9 @@ public static ArrayList<Nodo> ArbolesPreOrden = new ArrayList<Nodo>();
             //dirección doonde se ecnuentra el compilador de graphviz
             String dotPath = "C:\\Program Files (x86)\\Graphviz2.38\\bin\\dot.exe";
             //dirección del archivo dot
-            String fileInputPath = "C:\\Users\\home\\Desktop\\" + nombre + contadorArc + ".dot";
+            String fileInputPath = "C:\\Users\\home\\Desktop\\Documentos Escritorio\\Universidad\\Quinto Semestre\\Compiladores 1\\Laboratorio\\OLC1-Proyecto1-201905837\\OCL Proyecto 1\\Tabla de Transiciones\\" + nombre + ".dot";
             //dirección donde se creara la magen
-            String fileOutputPath = "C:\\Users\\home\\Desktop\\" +nombre + contadorArc + ".jpg";
+            String fileOutputPath = "C:\\Users\\home\\Desktop\\Documentos Escritorio\\Universidad\\Quinto Semestre\\Compiladores 1\\Laboratorio\\OLC1-Proyecto1-201905837\\OCL Proyecto 1\\Tabla de Transiciones\\" +nombre  + ".jpg";
             //tipo de conversón
             String tParam = "-Tjpg";
             String tOParam = "-o";
@@ -411,7 +402,7 @@ public static ArrayList<Nodo> ArbolesPreOrden = new ArrayList<Nodo>();
         FileWriter fichero = null;
         PrintWriter pw = null;
         try {
-            fichero = new FileWriter("C:\\Users\\home\\Desktop\\" + nombre+ contadorArc + ".dot");
+            fichero = new FileWriter("C:\\Users\\home\\Desktop\\Documentos Escritorio\\Universidad\\Quinto Semestre\\Compiladores 1\\Laboratorio\\OLC1-Proyecto1-201905837\\OCL Proyecto 1\\Tabla de Siguientes\\" + nombre + ".dot");
             pw = new PrintWriter(fichero);
             pw.println("digraph G{");
             pw.println("graph [pad=\"0.5\", nodesep=\"0.5\", ranksep=\"2\"];");
@@ -435,9 +426,9 @@ public static ArrayList<Nodo> ArbolesPreOrden = new ArrayList<Nodo>();
             //dirección doonde se ecnuentra el compilador de graphviz
             String dotPath = "C:\\Program Files (x86)\\Graphviz2.38\\bin\\dot.exe";
             //dirección del archivo dot
-            String fileInputPath = "C:\\Users\\home\\Desktop\\" + nombre + contadorArc + ".dot";
+            String fileInputPath = "C:\\Users\\home\\Desktop\\Documentos Escritorio\\Universidad\\Quinto Semestre\\Compiladores 1\\Laboratorio\\OLC1-Proyecto1-201905837\\OCL Proyecto 1\\Tabla de Siguientes\\" + nombre + ".dot";
             //dirección donde se creara la magen
-            String fileOutputPath = "C:\\Users\\home\\Desktop\\" +nombre + contadorArc + ".jpg";
+            String fileOutputPath = "C:\\Users\\home\\Desktop\\Documentos Escritorio\\Universidad\\Quinto Semestre\\Compiladores 1\\Laboratorio\\OLC1-Proyecto1-201905837\\OCL Proyecto 1\\Tabla de Siguientes\\" +nombre + ".jpg";
             //tipo de conversón
             String tParam = "-Tjpg";
             String tOParam = "-o";
@@ -463,7 +454,7 @@ public static ArrayList<Nodo> ArbolesPreOrden = new ArrayList<Nodo>();
         FileWriter fichero = null;
         PrintWriter pw = null;
         try {
-            fichero = new FileWriter("C:\\Users\\home\\Desktop\\" + nombre+ contadorArc + ".dot");
+            fichero = new FileWriter("C:\\Users\\home\\Desktop\\Documentos Escritorio\\Universidad\\Quinto Semestre\\Compiladores 1\\Laboratorio\\OLC1-Proyecto1-201905837\\OCL Proyecto 1\\AFD\\" + nombre + ".dot");
             pw = new PrintWriter(fichero);
             pw.println("digraph G{");
             pw.println("graph [pad=\"0.5\", nodesep=\"0.5\", ranksep=\"2\"];");
@@ -487,9 +478,10 @@ public static ArrayList<Nodo> ArbolesPreOrden = new ArrayList<Nodo>();
             //dirección doonde se ecnuentra el compilador de graphviz
             String dotPath = "C:\\Program Files (x86)\\Graphviz2.38\\bin\\dot.exe";
             //dirección del archivo dot
-            String fileInputPath = "C:\\Users\\home\\Desktop\\" + nombre + contadorArc + ".dot";
+            
+            String fileInputPath = "C:\\Users\\home\\Desktop\\Documentos Escritorio\\Universidad\\Quinto Semestre\\Compiladores 1\\Laboratorio\\OLC1-Proyecto1-201905837\\OCL Proyecto 1\\AFD\\" + nombre + ".dot";
             //dirección donde se creara la magen
-            String fileOutputPath = "C:\\Users\\home\\Desktop\\" +nombre + contadorArc + ".jpg";
+            String fileOutputPath = "C:\\Users\\home\\Desktop\\Documentos Escritorio\\Universidad\\Quinto Semestre\\Compiladores 1\\Laboratorio\\OLC1-Proyecto1-201905837\\OCL Proyecto 1\\AFD\\" +nombre+ ".jpg";
             //tipo de conversón
             String tParam = "-Tjpg";
             String tOParam = "-o";

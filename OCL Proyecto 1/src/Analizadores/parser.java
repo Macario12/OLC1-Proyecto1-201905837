@@ -257,7 +257,7 @@ public class parser extends java_cup.runtime.lr_parser {
         FileWriter fichero = null;
         PrintWriter pw = null;
         try {
-            fichero = new FileWriter("C:\\Users\\home\\Desktop\\" + nombre+ contadorArc + ".dot");
+            fichero = new FileWriter("C:\\Users\\home\\Desktop\\Documentos Escritorio\\Universidad\\Quinto Semestre\\Compiladores 1\\Laboratorio\\OLC1-Proyecto1-201905837\\OCL Proyecto 1\\Arboles\\" + nombre+ ".dot");
             pw = new PrintWriter(fichero);
             pw.println("digraph G{");
             pw.println("rankdir=UD");
@@ -281,9 +281,9 @@ public class parser extends java_cup.runtime.lr_parser {
             //dirección doonde se ecnuentra el compilador de graphviz
             String dotPath = "C:\\Program Files (x86)\\Graphviz2.38\\bin\\dot.exe";
             //dirección del archivo dot
-            String fileInputPath = "C:\\Users\\home\\Desktop\\" + nombre + contadorArc + ".dot";
+            String fileInputPath = "C:\\Users\\home\\Desktop\\Documentos Escritorio\\Universidad\\Quinto Semestre\\Compiladores 1\\Laboratorio\\OLC1-Proyecto1-201905837\\OCL Proyecto 1\\Arboles\\" + nombre+ ".dot";
             //dirección donde se creara la magen
-            String fileOutputPath = "C:\\Users\\home\\Desktop\\" +nombre + contadorArc + ".jpg";
+            String fileOutputPath = "C:\\Users\\home\\Desktop\\Documentos Escritorio\\Universidad\\Quinto Semestre\\Compiladores 1\\Laboratorio\\OLC1-Proyecto1-201905837\\OCL Proyecto 1\\Arboles\\" +nombre + ".jpg";
             //tipo de conversón
             String tParam = "-Tjpg";
             String tOParam = "-o";
@@ -850,6 +850,9 @@ class CUP$parser$actions {
           case 49: // EXPRESION ::= identificador guion mayorq EXPRESIONDEF puntoycoma 
             {
               Nodo RESULT =null;
+		int sleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).left;
+		int sright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).right;
+		String s = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-4)).value;
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Nodo a = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
@@ -868,10 +871,10 @@ class CUP$parser$actions {
                 Interfaz.Arboles.add(a);
                 Nodo.preOrden(nodoRaiz2);
                  contadorhojas = 1;
-                graficarArbol(nodoRaiz2,"Arbol");
-                Nodo.graficarTablaSiguientes("tablaSiguientes");
-                Nodo.graficarTablaransciones("tablaTransiciones");
-                Nodo.graficarAFD("AFD");
+                graficarArbol(nodoRaiz2,"Arbol"+s);
+                Nodo.graficarTablaSiguientes("Tabla Siguientes "+s);
+                Nodo.graficarTablaransciones("Tabla Transiciones "+s);
+                Nodo.graficarAFD("AFD "+s);
                 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("EXPRESION",7, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }

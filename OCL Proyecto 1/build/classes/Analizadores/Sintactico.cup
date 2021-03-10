@@ -18,7 +18,7 @@ parser code
         FileWriter fichero = null;
         PrintWriter pw = null;
         try {
-            fichero = new FileWriter("C:\\Users\\home\\Desktop\\" + nombre+ contadorArc + ".dot");
+            fichero = new FileWriter("C:\\Users\\home\\Desktop\\Documentos Escritorio\\Universidad\\Quinto Semestre\\Compiladores 1\\Laboratorio\\OLC1-Proyecto1-201905837\\OCL Proyecto 1\\Arboles\\" + nombre+ ".dot");
             pw = new PrintWriter(fichero);
             pw.println("digraph G{");
             pw.println("rankdir=UD");
@@ -42,9 +42,9 @@ parser code
             //dirección doonde se ecnuentra el compilador de graphviz
             String dotPath = "C:\\Program Files (x86)\\Graphviz2.38\\bin\\dot.exe";
             //dirección del archivo dot
-            String fileInputPath = "C:\\Users\\home\\Desktop\\" + nombre + contadorArc + ".dot";
+            String fileInputPath = "C:\\Users\\home\\Desktop\\Documentos Escritorio\\Universidad\\Quinto Semestre\\Compiladores 1\\Laboratorio\\OLC1-Proyecto1-201905837\\OCL Proyecto 1\\Arboles\\" + nombre+ ".dot";
             //dirección donde se creara la magen
-            String fileOutputPath = "C:\\Users\\home\\Desktop\\" +nombre + contadorArc + ".jpg";
+            String fileOutputPath = "C:\\Users\\home\\Desktop\\Documentos Escritorio\\Universidad\\Quinto Semestre\\Compiladores 1\\Laboratorio\\OLC1-Proyecto1-201905837\\OCL Proyecto 1\\Arboles\\" +nombre + ".jpg";
             //tipo de conversón
             String tParam = "-Tjpg";
             String tOParam = "-o";
@@ -155,7 +155,7 @@ CODIGOASCCI::= a33
     |comma
     ;
     
-EXPRESION::= identificador guion mayorq EXPRESIONDEF:a puntoycoma  {:
+EXPRESION::= identificador:s guion mayorq EXPRESIONDEF:a puntoycoma  {:
                 Nodo numeralnodo = new Nodo(null, null, "#", parser.contadorid,"N",parser.contadorhojas, parser.contadorhojas+"",parser.contadorhojas+"");
                 parser.contadorhojas++;
                 parser.contadorid++;
@@ -170,10 +170,10 @@ EXPRESION::= identificador guion mayorq EXPRESIONDEF:a puntoycoma  {:
                 Interfaz.Arboles.add(a);
                 Nodo.preOrden(nodoRaiz2);
                  contadorhojas = 1;
-                graficarArbol(nodoRaiz2,"Arbol");
-                Nodo.graficarTablaSiguientes("tablaSiguientes");
-                Nodo.graficarTablaransciones("tablaTransiciones");
-                Nodo.graficarAFD("AFD");
+                graficarArbol(nodoRaiz2,"Arbol"+s);
+                Nodo.graficarTablaSiguientes("Tabla Siguientes "+s);
+                Nodo.graficarTablaransciones("Tabla Transiciones "+s);
+                Nodo.graficarAFD("AFD "+s);
                 :}
     ;
 
