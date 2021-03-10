@@ -11,10 +11,14 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -32,14 +36,15 @@ public class Interfaz extends javax.swing.JFrame {
     public static String list_of_names="";
     public static ArrayList<Nodo> Arboles;
     public static ArrayList<String> nombre;
+    public static ArrayList<Errores> listaErrores = new ArrayList<Errores>();
     public Interfaz() {
         initComponents();
         jComboBox1.removeAllItems();
         jComboBox2.removeAllItems();
-        jComboBox1.addItem("Arboles");
-        jComboBox1.addItem("AFD");
-        jComboBox1.addItem("Tabla de Siguientes");
-        jComboBox1.addItem("Tabla de Transiciones");
+        jComboBox1.addItem("ARBOLES_201905837");
+        jComboBox1.addItem("AFD_201905837");
+        jComboBox1.addItem("SIGUIENTES_201905837");
+        jComboBox1.addItem("TRANSICIONES_201905837");
         valida = true;
         
     }
@@ -263,6 +268,8 @@ public class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        
+        listaErrores.clear();
         Arboles = new ArrayList<Nodo>();
         nombre = new ArrayList<String>();
         list_of_names="";
@@ -275,13 +282,68 @@ public class Interfaz extends javax.swing.JFrame {
             jTextArea2.setText(list_of_names);
         } catch (Exception e) {
         }
+        for(int i =0; i<listaErrores.size();i++){
+            System.out.println("i: "+i+" Tipo: "+listaErrores.get(i).tipoError+" valorError:"+listaErrores.get(i).valorError+" fila:"+listaErrores.get(i).fila+" Columna:"+listaErrores.get(i).columna);
+        }
+        ReporteErrores();
     }//GEN-LAST:event_jButton2ActionPerformed
     public boolean valida = false;
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
         Carpeta1();
     }//GEN-LAST:event_jComboBox1ActionPerformed
-
+    public static int contadorpaerror = 0;
+    public void ReporteErrores(){
+        FileWriter fichero = null;
+                PrintWriter pw = null;
+                try {
+                    contadorpaerror++;
+                    fichero = new FileWriter("C:\\Users\\home\\Desktop\\Documentos Escritorio\\Universidad\\Quinto Semestre\\Compiladores 1\\Laboratorio\\OLC1-Proyecto1-201905837\\OCL Proyecto 1\\ERRORES_201905837\\Errores"+contadorpaerror+".html");
+                    pw = new PrintWriter(fichero);
+                    //comenzamos a escribir el html
+                    pw.println("<html>");
+                    pw.println("<head><title>REPORTE DE ERRORES</title></head>");
+                    pw.println("<body>");
+                    pw.println("<div align=\"center\">");
+                    pw.println("<h1>Reporte de Errores</h1>");
+                    pw.println("<br></br>");
+                    pw.println("<table border=1>");
+                    pw.println("<tr>");
+                    pw.println("<td bgcolor=green>TIPO</td>");
+                    pw.println("<td bgcolor=green>VALOR</td>");
+                    pw.println("<td bgcolor=green>FILA</td>");
+                    pw.println("<td bgcolor=green>COLUMNA</td>");
+                    pw.println("</tr>");
+                    for(int i=0;i<listaErrores.size();i++){
+                        pw.println("<tr>");
+                        pw.println("<td>"+listaErrores.get(i).getTipoError()+"</td>");
+                        pw.println("<td>"+listaErrores.get(i).getValorError()+"</td>");
+                        pw.println("<td>"+listaErrores.get(i).getFila()+"</td>");
+                        pw.println("<td>"+listaErrores.get(i).getColumna()+"</td>");
+                        pw.println("</tr>");
+                    }
+                    pw.println("</table>");
+                    pw.println("</div");
+                    pw.println("</body>");
+                    pw.println("</html>");
+                } catch (Exception e) {
+                }finally{
+                    if(null!=fichero){
+                        try {
+                            fichero.close();
+                        } catch (IOException ex) {
+                            Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+                try {
+            Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + "Reportes\\"+"Reporte ErroresL.html");
+            //System.out.println("Final");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
         // TODO add your handling code here:
         if(valida == true){mostrarimg();}

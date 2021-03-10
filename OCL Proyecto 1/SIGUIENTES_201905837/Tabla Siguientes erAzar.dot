@@ -1,0 +1,6 @@
+digraph G{
+graph [pad="0.5", nodesep="0.5", ranksep="2"];
+node [shape=plain]
+rankdir=LR;
+Foo [label=< <table border="0" cellborder="1" cellspacing="0"> <tr><td>Hoja</td><td>Siguiente</td></tr> <tr><td>1-simbols</td><td>1,2,3</td></tr> <tr><td>2-minus</td><td>2,3,4</td></tr> <tr><td>3-mayus</td><td>2,3,4</td></tr> <tr><td>4-#</td><td></td></tr> </table>>];
+}
