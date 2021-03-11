@@ -1,0 +1,37 @@
+digraph G{
+rankdir=UD
+node[shape=box]
+concentrate=true
+nodo16 [ shape=record, label ="1|{N|.| id:0}|8"];
+nodo14 [ shape=record, label ="1|{N|.| id:0}|2,3,4,5,6,7"];
+nodo5 [ shape=record, label ="1|{N|.| id:0}|2,3"];
+nodo1 [ shape=record, label ="1|{N|@| id:1}|1"];
+nodo5->nodo1
+nodo4 [ shape=record, label ="2,3|{N|\|| id:0}|2,3"];
+nodo2 [ shape=record, label ="2|{N|minus| id:2}|2"];
+nodo4->nodo2
+nodo3 [ shape=record, label ="3|{N|mayus| id:3}|3"];
+nodo4->nodo3
+nodo5->nodo4
+nodo14->nodo5
+nodo13 [ shape=record, label ="4,5,6,7|{A|*| id:0}|4,5,6,7"];
+nodo12 [ shape=record, label ="4,5,6,7|{N|\|| id:0}|4,5,6,7"];
+nodo10 [ shape=record, label ="4,5,6|{N|\|| id:0}|4,5,6"];
+nodo8 [ shape=record, label ="4,5|{N|\|| id:0}|4,5"];
+nodo6 [ shape=record, label ="4|{N|minus| id:4}|4"];
+nodo8->nodo6
+nodo7 [ shape=record, label ="5|{N|mayus| id:5}|5"];
+nodo8->nodo7
+nodo10->nodo8
+nodo9 [ shape=record, label ="6|{N|num| id:6}|6"];
+nodo10->nodo9
+nodo12->nodo10
+nodo11 [ shape=record, label ="7|{N|_| id:7}|7"];
+nodo12->nodo11
+nodo13->nodo12
+nodo14->nodo13
+nodo16->nodo14
+nodo15 [ shape=record, label ="8|{N|#| id:8}|8"];
+nodo16->nodo15
+
+}

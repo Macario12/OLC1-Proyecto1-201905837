@@ -1,0 +1,5 @@
+digraph G{
+graph [pad="0.5", nodesep="0.5", ranksep="2"];
+rankdir=LR;
+node [shape=circle]
+}

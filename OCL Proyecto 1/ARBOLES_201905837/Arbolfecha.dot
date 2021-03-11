@@ -1,0 +1,47 @@
+digraph G{
+rankdir=UD
+node[shape=box]
+concentrate=true
+nodo37 [ shape=record, label ="1|{N|.| id:0}|11"];
+nodo35 [ shape=record, label ="1|{N|.| id:0}|10"];
+nodo17 [ shape=record, label ="1|{N|num| id:1}|1"];
+nodo35->nodo17
+nodo34 [ shape=record, label ="2|{N|.| id:0}|10"];
+nodo18 [ shape=record, label ="2|{N|num| id:2}|2"];
+nodo34->nodo18
+nodo33 [ shape=record, label ="3|{N|.| id:0}|10"];
+nodo19 [ shape=record, label ="3|{N|/| id:3}|3"];
+nodo33->nodo19
+nodo32 [ shape=record, label ="4|{N|.| id:0}|10"];
+nodo20 [ shape=record, label ="4|{N|num| id:4}|4"];
+nodo32->nodo20
+nodo31 [ shape=record, label ="5|{N|.| id:0}|10"];
+nodo21 [ shape=record, label ="5|{N|num| id:5}|5"];
+nodo31->nodo21
+nodo30 [ shape=record, label ="6|{N|.| id:0}|10"];
+nodo22 [ shape=record, label ="6|{N|/| id:6}|6"];
+nodo30->nodo22
+nodo29 [ shape=record, label ="7|{N|.| id:0}|10"];
+nodo23 [ shape=record, label ="7|{N|num| id:7}|7"];
+nodo29->nodo23
+nodo28 [ shape=record, label ="8|{N|.| id:0}|10"];
+nodo24 [ shape=record, label ="8|{N|num| id:8}|8"];
+nodo28->nodo24
+nodo27 [ shape=record, label ="9|{N|.| id:0}|10"];
+nodo25 [ shape=record, label ="9|{N|num| id:9}|9"];
+nodo27->nodo25
+nodo26 [ shape=record, label ="10|{N|num| id:10}|10"];
+nodo27->nodo26
+nodo28->nodo27
+nodo29->nodo28
+nodo30->nodo29
+nodo31->nodo30
+nodo32->nodo31
+nodo33->nodo32
+nodo34->nodo33
+nodo35->nodo34
+nodo37->nodo35
+nodo36 [ shape=record, label ="11|{N|#| id:11}|11"];
+nodo37->nodo36
+
+}
