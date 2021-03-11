@@ -1,5 +1,6 @@
 package Analizadores;
 import java_cup.runtime.*;
+import ocl.proyecto.pkg1.*;
 
 %%
 
@@ -36,7 +37,10 @@ commultilinea = ("<""!"[^\!]*"!"">")
 
 
 %{
-    
+    public void AddError(String tipo, String lexema, int fila, int columna){
+        Errores nuevoE= new Errores(tipo, lexema, fila+1, columna+1);
+        Interfaz.listaErrores.add(nuevoE);
+    }
 %}
 
 %%
@@ -98,5 +102,6 @@ commultilinea = ("<""!"[^\!]*"!"">")
 
 .   {
 	    System.err.println("Error lexico: "+yytext()+ " Linea:"+(yyline)+" Columna:"+(yychar));
+             AddError("Error Léxico",yytext(),yyline,yycolumn);
     }
 

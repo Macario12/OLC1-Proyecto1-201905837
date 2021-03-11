@@ -107,53 +107,56 @@ CUERPO::=  CONJUNTO CUERPO
     |CONJUNTO
     ;
 
-CONJUNTO::= conj dospuntos identificador guion mayorq CONJUNTODEF:a puntoycoma{::}
+CONJUNTO::= conj dospuntos identificador:b guion mayorq CONJUNTODEF:a puntoycoma{:
+        Nodo.conjuntos.add(new Conjunto(b,a));
+    :}
     ;
 CONJUNTODEF::= 
-     identificador:a tildeseparacion identificador:b {::}
-    |entero:a tildeseparacion entero:b {::}
-    |CODIGOASCCI:a tildeseparacion CODIGOASCCI:b {::}
+     identificador:a tildeseparacion identificador:b {:RESULT = a + "~" +b;:}
+    |entero:a tildeseparacion entero:b {:RESULT = a + "~" +b;:}
+    |CODIGOASCCI:a tildeseparacion CODIGOASCCI:b {:RESULT = a + "~" +b;:}
     |identificador:a comma CONJUNTODEF:b {: RESULT=a +","+b; :} 
     |entero:a comma CONJUNTODEF:b {: RESULT=a +","+b; :} 
     |CODIGOASCCI:a comma CONJUNTODEF:b {: RESULT=a +","+b; :} 
-    |identificador:a {::}
-    |entero:a {::}
-    |CODIGOASCCI:a {::}
-    |especialC:a {::}
+    |identificador:a {:RESULT=a;:}
+    |entero:a {:RESULT=a;:}
+    |CODIGOASCCI:a {:RESULT=a;:}
+    |especialC:a {:RESULT=a;:}
+    |error identificador
     ;
 
-CODIGOASCCI::= a33
-    |a34
-    |a35
-    |a36
-    |a38
-    |a39
-    |a40
-    |a41
-    |a47
-    |a60
-    |a61
-    |a64
-    |a91
-    |a92
-    |a93
-    |a94
-    |a95
-    |a96
-    |unaomasveces
-    |concatenacion
-    |ceroomasveces
-    |disyuncion
-    |ceroounavez
-    |tildeseparacion
-    |llaveapertura
-    |llavecerradura
-    |dospuntos
-    |guion
-    |mayorq
-    |puntoycoma
-    |porcentaje 
-    |comma
+CODIGOASCCI::= a33 :a {:RESULT=a;:}
+    |a34 :a {:RESULT=a;:}
+    |a35:a {:RESULT=a;:}
+    |a36:a {:RESULT=a;:}
+    |a38:a {:RESULT=a;:}
+    |a39:a {:RESULT=a;:}
+    |a40:a {:RESULT=a;:}
+    |a41:a {:RESULT=a;:}
+    |a47:a {:RESULT=a;:}
+    |a60:a {:RESULT=a;:}
+    |a61:a {:RESULT=a;:}
+    |a64:a {:RESULT=a;:}
+    |a91:a {:RESULT=a;:}
+    |a92:a {:RESULT=a;:}
+    |a93:a {:RESULT=a;:}
+    |a94:a {:RESULT=a;:}
+    |a95:a {:RESULT=a;:}
+    |a96:a {:RESULT=a;:}
+    |unaomasveces:a {:RESULT=a;:}
+    |concatenacion:a {:RESULT=a;:}
+    |ceroomasveces:a {:RESULT=a;:}
+    |disyuncion:a {:RESULT=a;:}
+    |ceroounavez:a {:RESULT=a;:}
+    |tildeseparacion:a {:RESULT=a;:}
+    |llaveapertura:a {:RESULT=a;:}
+    |llavecerradura:a {:RESULT=a;:}
+    |dospuntos:a {:RESULT=a;:}
+    |guion:a {:RESULT=a;:}
+    |mayorq:a {:RESULT=a;:}
+    |puntoycoma:a {:RESULT=a;:}
+    |porcentaje :a {:RESULT=a;:}
+    |comma:a {:RESULT=a;:}
     ;
     
 EXPRESION::= identificador:s guion mayorq EXPRESIONDEF:a puntoycoma  {:
@@ -172,9 +175,12 @@ EXPRESION::= identificador:s guion mayorq EXPRESIONDEF:a puntoycoma  {:
                 Nodo.preOrden(nodoRaiz2);
                  contadorhojas = 1;
                 graficarArbol(nodoRaiz2,"Arbol"+s);
+                
                 Nodo.graficarTablaSiguientes("Tabla Siguientes "+s);
                 Nodo.graficarTablaransciones("Tabla Transiciones "+s);
                 Nodo.graficarAFD("AFD "+s);
+                Nodo.preordenArbolito(a);
+                Nodo.graficarAFND(a,"AFND"+s);
                 :}
     ;
 
@@ -247,6 +253,7 @@ EXPRESIONDEF::=
                 parser.contadorid++;
                 RESULT=nuevoespcialC;
     :}
+    |error identificador
     ;
 
 
@@ -255,8 +262,10 @@ EXPVALIDAR::= CADENAAR EXPVALIDAR
     |CADENAAR
     ;  
 
-CADENAAR::= identificador dospuntos cadena:a puntoycoma {:System.out.println("Cadena: "+a);:}    
-        | identificador dospuntos especialC:a puntoycoma {:System.out.println("Cadena: "+a);:} ;
+CADENAAR::= identificador dospuntos cadena:a puntoycoma {:Nodo.cadenas.add(a);:}    
+        | identificador dospuntos especialC:a puntoycoma {:Nodo.cadenas.add(a);:} 
+        |error identificador
+        ;
 /*
 //2+2*2.5+10*2
 

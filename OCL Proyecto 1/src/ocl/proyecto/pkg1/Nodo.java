@@ -121,6 +121,33 @@ public class Nodo {
     }
     
 public static ArrayList<Nodo> ArbolesPreOrden = new ArrayList<Nodo>();
+public static ArrayList<Conjunto> conjuntos = new ArrayList<Conjunto>();
+public static ArrayList<String> cadenas = new ArrayList<>();
+
+    public static void cadena(){
+        for(int x = 0; x < conjuntos.size();x++){
+            if(conjuntos.get(x).rango.charAt(1) == '~'){
+                String [] rangopro = conjuntos.get(x).rango.split("~");
+                String variableaux = "";
+                int inicioA = rangopro[0].charAt(0);
+                int finB = rangopro[1].charAt(0);
+                for(int y = inicioA;y <finB+1; y++){
+                    char j = (char) y;
+                    variableaux += ","+j;
+                }
+                variableaux  = variableaux.replaceFirst(",", "");
+                conjuntos.get(x).setRango(variableaux);
+            }
+            
+        }
+        for(int x = 0; x < conjuntos.size();x++){
+            System.out.println("Nombre "+ conjuntos.get(x).nombre);
+            System.out.println("Rango "+ conjuntos.get(x).rango);
+        }
+        for(int x = 0; x < cadenas.size();x++){
+            System.out.println("Cadena "+ cadenas.get(x));
+        }
+    }
     public static void preOrden(Nodo nodo){
         if(nodo != null){
             ArbolesPreOrden.add(nodo);
@@ -133,6 +160,13 @@ public static ArrayList<Nodo> ArbolesPreOrden = new ArrayList<Nodo>();
      public static int contador = 0;
      public static int valorCon = 0;
      public static ArrayList arrayaux;
+     public static int contadorEn = 0;
+     public static ArrayList<String> 
+         encabezado;
+     public static ArrayList<SiguientesN> sigN;
+     
+     public static ArrayList<TransicionN> transN;
+     public static ArrayList<AFD> arrayAFD;
      
      public static String getTableInterna(int valorcontador){
          sigN = new ArrayList<SiguientesN>();
@@ -188,14 +222,60 @@ public static ArrayList<Nodo> ArbolesPreOrden = new ArrayList<Nodo>();
         
         return etiqueta;
     }
+     public static ArrayList<Nodo> ArbolitoPre = new ArrayList<Nodo>();
+     public static void preordenArbolito(Nodo arbol){
+        
+         if(arbol != null){
+            preordenArbolito(arbol.hizq);
+            preordenArbolito(arbol.hder);
+            ArbolitoPre.add(arbol);
+        }
+     }
+     public static int contadorAFND;
+     public static String getAFND(Nodo arbol){
+         
+         contadorAFND = 0;
+         String etiqueta = "";
+         etiqueta += "node [shape=circle]";
+         for(int x = 0; x <ArbolitoPre.size();x++){
+             if(ArbolitoPre.get(x).valor.equals("|")  && ArbolitoPre.get(x).numNodo == 0){
+                 etiqueta += "S"+(contadorAFND)+"->"+"S"+(contadorAFND+1)+"[ label = \""+"ε"+"\"]"+"\n";
+                 etiqueta += "S"+(contadorAFND+1)+"->"+"S"+(contadorAFND+2)+"[ label = \""+ArbolitoPre.get(x).hizq.valor+"\"]"+"\n";
+                 etiqueta += "S"+(contadorAFND+1)+"->"+"S"+(contadorAFND+5)+"[ label = \""+ArbolitoPre.get(x).hder.valor+"\"]"+"\n";
+                 etiqueta += "S"+(contadorAFND+2)+"->"+"S"+(contadorAFND+3)+"[ label = \""+"ε"+"\"]"+"\n";
+                 etiqueta += "S"+(contadorAFND+4)+"->"+"S"+(contadorAFND+6)+"[ label = \""+"ε"+"\"]"+"\n";
+                 etiqueta += "S"+(contadorAFND+3)+"->"+"S"+(contadorAFND+4)+"[ label = \""+"ε"+"\"]"+"\n";
+                 etiqueta += "S"+(contadorAFND+6)+"->"+"S"+(contadorAFND+4)+"[ label = \""+"ε"+"\"]"+"\n";
+                 contadorAFND += 6;
+                
+             }else if(ArbolitoPre.get(x).valor.equals("+")  && ArbolitoPre.get(x).numNodo == 0){
+                 
+                 etiqueta += "S"+(contadorAFND)+"->"+"S"+(contadorAFND+1)+"[ label = \""+"ε"+"\"]"+"\n";
+                 etiqueta += "S"+(contadorAFND+1)+"->"+"S"+(contadorAFND+2)+"[ label = \""+ArbolitoPre.get(x).hizq.valor+"\"]"+"\n";
+                 etiqueta += "S"+(contadorAFND+2)+"->"+"S"+(contadorAFND+3)+"[ label = \""+"ε"+"\"]"+"\n";
+                 etiqueta += "S"+(contadorAFND+2)+"->"+"S"+(contadorAFND+1)+"[ label = \""+"ε"+"\"]"+"\n";
+                 contadorAFND += 3;
+             }else if(ArbolitoPre.get(x).valor.equals("*")  && ArbolitoPre.get(x).numNodo == 0){
+                 etiqueta += "S"+(contadorAFND)+"->"+"S"+(contadorAFND+1)+"[ label = \""+"ε"+"\"]"+"\n";
+                 etiqueta += "S"+(contadorAFND+1)+"->"+"S"+(contadorAFND+2)+"[ label = \""+ArbolitoPre.get(x).hizq.valor+"\"]"+"\n";
+                 etiqueta += "S"+(contadorAFND+2)+"->"+"S"+(contadorAFND+3)+"[ label = \""+"ε"+"\"]"+"\n";
+                 etiqueta += "S"+(contadorAFND+2)+"->"+"S"+(contadorAFND+1)+"[ label = \""+"ε"+"\"]"+"\n";
+                 etiqueta += "S"+(contadorAFND)+"->"+"S"+(contadorAFND+3)+"[ label = \""+"ε"+"\"]"+"\n";
+                 contadorAFND += 3;
+
+             }else if(ArbolitoPre.get(x).valor.equals("?") && ArbolitoPre.get(x).numNodo == 0){
+                 etiqueta += "S"+(contadorAFND)+"->"+"S"+(contadorAFND+1)+"[ label = \""+"ε"+"\"]"+"\n";
+                 etiqueta += "S"+(contadorAFND+1)+"->"+"S"+(contadorAFND+2)+"[ label = \""+ArbolitoPre.get(x).hizq.valor+"\"]"+"\n";
+                 etiqueta += "S"+(contadorAFND+2)+"->"+"S"+(contadorAFND+3)+"[ label = \""+"ε"+"\"]"+"\n";
+                 etiqueta += "S"+(contadorAFND)+"->"+"S"+(contadorAFND+3)+"[ label = \""+"ε"+"\"]"+"\n";
+                 contadorAFND += 3;
+             }
+         }
+         ArbolitoPre = new ArrayList<Nodo>();
+         return etiqueta;
+     }
      
-     public static int contadorEn = 0;
-     public static ArrayList<String> 
-         encabezado;
-     public static ArrayList<SiguientesN> sigN;
      
-     public static ArrayList<TransicionN> transN;
-     public static ArrayList<AFD> arrayAFD;
      
      public static String getEncabezado(){
          String etiqueta="";
@@ -482,6 +562,59 @@ public static ArrayList<Nodo> ArbolesPreOrden = new ArrayList<Nodo>();
             String fileInputPath = "C:\\Users\\home\\Desktop\\Documentos Escritorio\\Universidad\\Quinto Semestre\\Compiladores 1\\Laboratorio\\OLC1-Proyecto1-201905837\\OCL Proyecto 1\\AFD_201905837\\" + nombre + ".dot";
             //dirección donde se creara la magen
             String fileOutputPath = "C:\\Users\\home\\Desktop\\Documentos Escritorio\\Universidad\\Quinto Semestre\\Compiladores 1\\Laboratorio\\OLC1-Proyecto1-201905837\\OCL Proyecto 1\\AFD_201905837\\" +nombre+ ".jpg";
+            //tipo de conversón
+            String tParam = "-Tjpg";
+            String tOParam = "-o";
+            contadorArc++;
+            String[] cmd = new String[5];
+            cmd[0] = dotPath;
+            cmd[1] = tParam;
+            cmd[2] = fileInputPath;
+            cmd[3] = tOParam;
+            cmd[4] = fileOutputPath;
+
+            Runtime rt = Runtime.getRuntime();
+
+            rt.exec(cmd);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+        }
+    }
+      
+      public static void graficarAFND(Nodo arbol,String nombre){
+        FileWriter fichero = null;
+        PrintWriter pw = null;
+        try {
+            fichero = new FileWriter("C:\\Users\\home\\Desktop\\Documentos Escritorio\\Universidad\\Quinto Semestre\\Compiladores 1\\Laboratorio\\OLC1-Proyecto1-201905837\\OCL Proyecto 1\\AFND_201905837\\" + nombre + ".dot");
+            pw = new PrintWriter(fichero);
+            pw.println("digraph G{");
+            pw.println("graph [pad=\"0.5\", nodesep=\"0.5\", ranksep=\"2\"];");
+            
+            pw.println("rankdir=LR;");
+            pw.println(""+getAFND(arbol)+"");
+            pw.println("}");
+        } catch (Exception e) {
+            System.out.println("error, no se realizo el archivo");
+        } finally {
+            try {
+                if (null != fichero) {
+                    fichero.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        //para compilar el archivo dot y obtener la imagen
+        try {
+            //dirección doonde se ecnuentra el compilador de graphviz
+            String dotPath = "C:\\Program Files (x86)\\Graphviz2.38\\bin\\dot.exe";
+            //dirección del archivo dot
+            
+            String fileInputPath = "C:\\Users\\home\\Desktop\\Documentos Escritorio\\Universidad\\Quinto Semestre\\Compiladores 1\\Laboratorio\\OLC1-Proyecto1-201905837\\OCL Proyecto 1\\AFND_201905837\\" + nombre + ".dot";
+            //dirección donde se creara la magen
+            String fileOutputPath = "C:\\Users\\home\\Desktop\\Documentos Escritorio\\Universidad\\Quinto Semestre\\Compiladores 1\\Laboratorio\\OLC1-Proyecto1-201905837\\OCL Proyecto 1\\AFND_201905837\\" +nombre+ ".jpg";
             //tipo de conversón
             String tParam = "-Tjpg";
             String tOParam = "-o";
